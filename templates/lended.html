@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Lended Items - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title">My Account</h2>
+        <div class="dashboard-grid">
+            <nav class="dashboard-nav">
+                <ul>
+                    <li><a href="{% url 'profile' %}">Profile Details</a></li>
+                    <li><a href="{% url 'borrowed_items' %}">My Borrowed Items</a></li>
+                    <li><a href="{% url 'lended_items' %}" class="active">My Lended Items</a></li>
+                    <li><a href="{% url 'transaction_history' %}">Transaction History</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </nav>
+            <div class="dashboard-content">
+                <h2>My Lended Items</h2>
+                <p>A list of items you are currently lending to other students.</p>
+                <br>
+                <div class="item-list">
+                    <table class="item-list-table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Borrower</th>
+                                <th>Return Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in lended_records %}
+                            <tr>
+                                <td>{{ record.item.name }}</td>
+                                <td>{{ record.borrower.username }}</td>
+                                <td>{{ record.return_date|date:"Y-m-d"|default:"N/A" }}</td>
+                                <td><span class="btn btn-secondary btn-sm">{{ record.get_status_display }}</span></td>
+                                <td>
+                                    {% if record.status == 'PENDING' %}
+                                        <a href="{% url 'approve_request' record.id %}" class="btn btn-success btn-sm">Approve</a>
+                                        <a href="{% url 'reject_request' record.id %}" class="btn btn-danger btn-sm">Reject</a>
+                                    {% elif record.status == 'ON_LOAN' %}
+                                        <a href="{% url 'request_deposit' record.id %}" class="btn btn-primary btn-sm">Request Deposit</a>
+                                        <a href="{% url 'generate_qr_code' record.id %}" class="btn btn-info btn-sm" target="_blank">Generate QR</a>
+                                    {% elif record.status == 'RETURN_PENDING' %}
+                                        <a href="{% url 'confirm_return' record.id %}" class="btn btn-success btn-sm">Confirm Return</a>
+                                    {% elif record.status == 'RETURNED' and not record.feedback %}
+                                        <a href="{% url 'leave_feedback' record.id %}" class="btn btn-info btn-sm">Leave Feedback</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center;">You have not lended any items yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

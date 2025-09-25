@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Add Item - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="form-container" style="max-width: 700px;">
+            <h2>Lend an Item</h2>
+            <p class="section-subtitle" style="text-align: left; max-width: 100%; margin-bottom: 2rem;">Fill out the details below to list your item for others to borrow.</p>
+            
+            <form id="add-item-form" method="POST" enctype="multipart/form-data" action="{% url 'add_item' %}">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                    <small>Upload a clear picture of your item.</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form.borrowing_terms.label_tag }}
+                    {{ form.borrowing_terms }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_borrowing_period">Borrowing Period (in days)</label>
+                    {{ form.borrowing_period }}
+                    <small>Enter the number of days the item can be borrowed for (e.g., 3, 7, 30).</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_deposit_amount">Security Deposit (₹)</label>
+                    {{ form.deposit_amount }}
+                    <small>This amount will be refunded to the borrower upon safe return of the item (optional).</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_rental_fee">Rental Fee (₹)</label>
+                    {{ form.rental_fee }}
+                    <small>The fee to rent this item. Leave this blank or 0 if the item is free to borrow.</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Add Item to Listings</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Settings - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title">My Account</h2>
+        <div class="dashboard-grid">
+            <nav class="dashboard-nav">
+                <ul>
+                    <li><a href="{% url 'profile' %}">Profile Details</a></li>
+                    <li><a href="{% url 'borrowed_items' %}">My Borrowed Items</a></li>
+                    <li><a href="{% url 'lended_items' %}">My Lended Items</a></li>
+                    <li><a href="{% url 'settings' %}" class="active">Settings</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </nav>
+            <div class="dashboard-content">
+                <h2>Settings</h2>
+                <p>Manage your account settings and preferences.</p>
+                <br>
+                <p><em>More settings will be available here in the future.</em></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

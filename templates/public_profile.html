@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ profile_user.username }}'s Profile - BorrowBuddy{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="profile-header" style="text-align: center; margin-bottom: 50px;">
+            <h2>{{ profile_user.username }}'s Profile</h2>
+            <p><strong>Member since:</strong> {{ profile_user.date_joined|date:"F Y" }}</p>
+            <p><strong>Location:</strong> {{ profile_user.location|default:"Not specified" }}</p>
+            <p><strong>Average Rating:</strong> 
+                <span style="color: #ffc107; font-weight: bold;">
+                    ★ {{ profile_user.average_rating|floatformat:1 }} / 5.0
+                </span>
+            </p>
+        </div>
+
+        <div class="lended-items-section" style="margin-bottom: 50px;">
+            <h3 style="margin-bottom: 2rem; text-align: center;">Items for Rent by {{ profile_user.username }}</h3>
+            <div class="item-grid">
+                {% for item in lended_items %}
+                <div class="item-card">
+                    <a href="{% url 'item_detail' item.id %}">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-card-img">
+                        {% else %}
+                            <img src="{% static 'images/default_placeholder.png' %}" alt="No image available" class="item-card-img">
+                        {% endif %}
+                    </a>
+                    <div class="item-card-content">
+                        <a href="{% url 'item_detail' item.id %}"><h3>{{ item.name }}</h3></a>
+                        <p class="item-category">{{ item.get_category_display }}</p>
+                        <div class="item-card-footer">
+                            <a href="{% url 'item_detail' item.id %}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                    <p class="text-center" style="grid-column: 1 / -1;">{{ profile_user.username }} is not currently lending any items.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <h3 style="margin-bottom: 2rem; text-align: center;">Reviews for {{ profile_user.username }}</h3>
+            <div class="reviews-list" style="max-width: 800px; margin: 0 auto;">
+                {% for review in reviews %}
+                    <div class="review-card" style="background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                        <p><strong>Rating: </strong> 
+                            <span style="color: #ffc107; font-weight: bold;">
+                                ★ {{ review.rating }}.0
+                            </span>
+                        </p>
+                        <p><em>"{{ review.comment }}"</em></p>
+                        <small style="color: var(--secondary-color);">-- {{ review.reviewer.username }} on {{ review.created_at|date:"d M, Y" }}</small>
+                    </div>
+                {% empty %}
+                    <p class="text-center">This user has not received any reviews yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

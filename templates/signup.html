@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign Up - BorrowBuddy{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="form-container">
+            <h2>Create Your Account</h2>
+            <p class="form-subtitle">Join our community and start sharing today!</p>
+            
+            <form id="signup-form" action="{% url 'signup' %}" method="POST" novalidate>
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <div class="input-wrapper">
+                        {{ field }}
+                        {% if field.name == 'password' or field.name == 'password2' %}
+                            <span class="password-toggle-icon">👁️</span>
+                        {% endif %}
+                    </div>
+                    {% if field.errors %}
+                        <div class="error-message" style="display: block;">
+                            {{ field.errors.as_text }}
+                        </div>
+                    {% endif %}
+                    <div id="{{ field.name }}-error" class="error-message"></div>
+                </div>
+                {% endfor %}
+
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="{% url 'terms' %}">Terms of Service</a>
+                    </label>
+                    <div id="terms-error" class="error-message"></div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                
+                <p class="form-text">
+                    Already have an account? <a href="{% url 'login' %}">Sign In</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

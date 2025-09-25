@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Borrowed Items - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title">My Account</h2>
+        <div class="dashboard-grid">
+            <nav class="dashboard-nav">
+                <ul>
+                    <li><a href="{% url 'profile' %}">Profile Details</a></li>
+                    <li><a href="{% url 'borrowed_items' %}" class="active">My Borrowed Items</a></li>
+                    <li><a href="{% url 'lended_items' %}">My Lended Items</a></li>
+                    <li><a href="{% url 'transaction_history' %}">Transaction History</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </nav>
+            <div class="dashboard-content">
+                <h2>My Borrowed Items</h2>
+                <p>A list of items you are currently borrowing from other students.</p>
+                <br>
+                <div class="item-list">
+                    <table class="item-list-table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Lender</th>
+                                <th>Return Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in borrowed_records %}
+                            <tr>
+                                <td>{{ record.item.name }}</td>
+                                <td>{{ record.item.owner.username }}</td>
+                                <td>{{ record.return_date|date:"Y-m-d"|default:"N/A" }}</td>
+                                <td><span class="btn btn-secondary btn-sm">{{ record.get_status_display }}</span></td>
+                                <td class="pay-button-container">
+                                    {% if record.status == 'ON_LOAN' %}
+                                        <a href="{% url 'mark_as_returned' record.id %}" class="btn btn-primary btn-sm">Mark as Returned</a>
+
+                                    {% elif record.status == 'AWAITING_DEPOSIT' %}
+                                        <button class="btn btn-success btn-sm pay-button"
+                                            data-record-id="{{ record.id }}"
+                                            data-url="{% url 'pay_deposit' record.id %}">
+                                            Pay ₹{{ record.item.deposit_amount }} Deposit
+                                        </button>
+
+                                    {% elif record.status == 'RETURNED' and not record.feedback %}
+                                        <a href="{% url 'leave_feedback' record.id %}" class="btn btn-info btn-sm">Leave Feedback</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center;">You have not borrowed any items yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const payButtons = document.querySelectorAll('.pay-button');
+    payButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = e.target.dataset.url;
+            const csrfToken = '{{ csrf_token }}';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                var options = {
+                    "key": data.key,
+                    "amount": data.amount,
+                    "order_id": data.order_id,
+                    "name": "BorrowBuddy Deposit",
+                    "description": data.description,
+                    "handler": function (response){
+                        fetch("{% url 'payment_success' %}", {
+                            method: 'POST',
+                            headers: { 'X-CSRFToken': csrfToken },
+                            body: new URLSearchParams({
+                                'razorpay_payment_id': response.razorpay_payment_id,
+                                'razorpay_order_id': response.razorpay_order_id,
+                                'razorpay_signature': response.razorpay_signature
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('Payment successful!');
+                                location.reload();
+                            } else {
+                                alert('Payment verification failed!');
+                            }
+                        });
+                    }
+                };
+                var rzp = new Razorpay(options);
+                rzp.open();
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

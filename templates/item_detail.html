@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ item.name }} - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="item-detail-grid">
+            <div class="item-detail-image">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                {% else %}
+                    <img src="{% static 'images/default_placeholder.png' %}" alt="No image available">
+                {% endif %}
+            </div>
+            <div class="item-detail-content">
+                <h1>{{ item.name }}</h1>
+                <p class="item-category">{{ item.get_category_display }}</p>
+                <p class="item-lender">Lender: <a href="{% url 'public_profile' item.owner.username %}">{{ item.owner.username }}</a> (Rating: {{ item.owner.average_rating|floatformat:1 }} / 5.0)</p>
+                <hr style="margin: 1.5rem 0;">
+                <h3>Description</h3>
+                <p>{{ item.description }}</p>
+                <hr style="margin: 1.5rem 0;">
+                <h3>Borrowing Terms</h3>
+                <p>{{ item.borrowing_terms }}</p>
+                <hr style="margin: 1.5rem 0;"><h3>Pricing Details</h3>
+                <p><strong>Rental Fee: ₹{{ item.rental_fee }}</strong></p>
+                {% if item.deposit_amount > 0 %}
+                    <p>A refundable security deposit of <strong>₹{{ item.deposit_amount }}</strong> is also required.</p>
+                {% endif %}
+                <hr style="margin: 1.5rem 0;">
+                {% if item.is_available %}
+                    <a href="{% url 'borrow_item' item.id %}" class="btn btn-primary">Rent Now for ₹{{ item.rental_fee }}</a>
+                {% else %}
+                    <p class="btn btn-secondary" style="cursor: not-allowed;">Currently Unavailable</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

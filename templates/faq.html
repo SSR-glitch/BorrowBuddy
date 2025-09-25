@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}FAQs - BorrowBuddy{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container" style="max-width: 800px;">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Have a question? We're here to help.</p>
+
+        <div class="faq-content" style="margin-top: 2rem; text-align: left;">
+            
+            <div class="faq-item" style="margin-bottom: 2rem;">
+                <h4>How does BorrowBuddy work?</h4>
+                <p>BorrowBuddy is a peer-to-peer platform where students can list items for others to rent. You can browse for items, pay the rental fee to send a request to the owner, and arrange a pickup if the owner approves your request.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 2rem;">
+                <h4>Are there fees to use the service?</h4>
+                <p>Listing an item is completely free for lenders. For borrowers, there is a rental fee for each item, which is set by the item's owner. This fee must be paid before your rental request is sent. Some items may also require an additional refundable security deposit.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 2rem;">
+                <h4>What is the difference between a Rental Fee and a Security Deposit?</h4>
+                <p>The <strong>Rental Fee</strong> is the cost to rent the item. This is a non-refundable payment that goes to the item's owner. The <strong>Security Deposit</strong> is an extra, optional amount held for security. This amount is <strong>fully refunded</strong> to you after you return the item safely.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 2rem;">
+                <h4>What happens if an item is returned late or damaged?</h4>
+                <p>The security deposit is held to cover such situations. If there's an issue, both the lender and borrower should first try to resolve it themselves. If they can't, they can contact our support team to mediate. Please refer to our Terms of Service for the full policy.</p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 2rem;">
+                <h4>How do I get my security deposit back?</h4>
+                <p>Once the lender confirms that the item has been returned safely, the security deposit is automatically refunded to your original payment method. The refund process typically takes 5-7 business days.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

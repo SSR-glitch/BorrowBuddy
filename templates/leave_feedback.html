@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Leave Feedback - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="form-container" style="max-width: 700px;">
+            <h2>Leave Feedback</h2>
+            <p>You are leaving feedback for <strong>{{ reviewee.username }}</strong> regarding the transaction for the item: <strong>{{ record.item.name }}</strong>.</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_rating">Rating (1-5)</label>
+                    {{ form.rating }}
+                </div>
+                <div class="form-group">
+                    <label for="id_comment">Comment</label>
+                    {{ form.comment }}
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}BorrowBuddy - College Item Sharing Portal{% endblock %}
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Borrow, Lend, and Save</h1>
+            <p>Your on-campus solution for borrowing and lending items. From textbooks to tennis rackets, find what you need from fellow students.</p>
+            <a href="{% url 'browse_items' %}" class="btn btn-primary">Browse Items</a>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS SECTION -->
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">A simple, secure, and convenient process for everyone.</p>
+        <div class="how-it-works-grid">
+            <div class="how-it-works-card">
+                <div class="icon"><i class="fas fa-search"></i></div>
+                <h3>1. Find an Item</h3>
+                <p>Browse our listings to find the textbook, calculator, or any other item you need for your classes.</p>
+            </div>
+            <div class="how-it-works-card">
+                <div class="icon"><i class="fas fa-handshake"></i></div>
+                <h3>2. Borrow from a Peer</h3>
+                <p>Connect with the student lending the item, agree on the terms, and arrange a pickup on campus.</p>
+            </div>
+            <div class="how-it-works-card">
+                <div class="icon"><i class="fas fa-undo-alt"></i></div>
+                <h3>3. Return & Rate</h3>
+                <p>Return the item as agreed and rate your experience to help build a trustworthy community.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURED ITEMS SECTION -->
+<section class="section-padding" style="background-color: var(--surface-color);">
+    <div class="container">
+        <h2 class="section-title">Featured Items</h2>
+        <p class="section-subtitle">Check out what other students are lending right now.</p>
+        <div class="item-grid">
+            {% for item in featured_items %}
+            <div class="item-card">
+                <a href="{% url 'item_detail' item.id %}">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-card-img">
+                {% else %}
+                    <img src="{% static 'images/default_placeholder.png' %}" alt="No image available" class="item-card-img">
+                {% endif %}
+                </a>
+                <div class="item-card-content">
+                    <a href="{% url 'item_detail' item.id %}"><h3>{{ item.name }}</h3></a>
+                    <p class="item-category">{{ item.get_category_display }}</p>
+                    <p class="item-lender">Lender: {{ item.owner.username }}</p>
+                    <div class="item-card-footer">
+                        <a href="{% url 'item_detail' item.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p class="text-center" style="grid-column: 1 / -1;">No featured items available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

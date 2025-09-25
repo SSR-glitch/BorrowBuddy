@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Browse Items - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title">Browse All Items</h2>
+        <p class="section-subtitle">Find what you need from our student community.</p>
+
+        <div class="search-container" style="margin-bottom: 40px; text-align: center;">
+            <form action="{% url 'browse_items' %}" method="get" class="form-inline">
+                <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search for items..." class="form-control" style="width: 40%; display: inline-block; margin-right: 10px;">
+                <select name="category" class="form-control" style="width: 20%; display: inline-block; margin-right: 10px;">
+                    <option value="">All Categories</option>
+                    {% for value, display in category_choices %}
+                        <option value="{{ value }}" {% if value == selected_category %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="location" value="{{ location|default:'' }}" placeholder="Location..." class="form-control" style="width: 20%; display: inline-block; margin-right: 10px;">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        
+        <div class="item-grid">
+            {% for item in items %}
+            <div class="item-card">
+                <a href="{% url 'item_detail' item.id %}">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-card-img">
+                {% else %}
+                    <img src="{% static 'images/default_placeholder.png' %}" alt="No image available" class="item-card-img">
+                {% endif %}
+                </a>
+                <div class="item-card-content">
+                    <a href="{% url 'item_detail' item.id %}"><h3>{{ item.name }}</h3></a>
+                    <p class="item-category">{{ item.get_category_display }}</p>
+                    <p class="item-lender">Lender: {{ item.owner.username }}</p>
+                    <div class="item-card-footer">
+                        <a href="{% url 'item_detail' item.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p class="text-center" style="grid-column: 1 / -1;">No items found.</p>
+            {% endfor %}
+        </div>
+
+        <div class="pagination" style="text-align: center; margin-top: 40px;">
+            <span class="step-links">
+                {% if items.has_previous %}
+                    <a href="?page=1{% if query %}&q={{ query }}{% endif %}">&laquo; first</a>
+                    <a href="?page={{ items.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ items.number }} of {{ items.paginator.num_pages }}.
+                </span>
+
+                {% if items.has_next %}
+                    <a href="?page={{ items.next_page_number }}{% if query %}&q={{ query }}{% endif %}">next</a>
+                    <a href="?page={{ items.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</section>
+{% endblock %}

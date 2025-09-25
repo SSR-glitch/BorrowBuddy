@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Contact Us - BorrowBuddy{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">Have questions or feedback? We'd love to hear from you. Reach out to us using the form below or through our campus office.</p>
+        
+        <div class="contact-grid">
+            
+            <div class="contact-form-container">
+                <h3>Send us a Message</h3>
+                <form id="contact-form" method="POST" action="{% url 'contact' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.full_name.label_tag }}
+                        {{ form.full_name }}
+                    </div>
+                     <div class="form-group">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.subject.label_tag }}
+                        {{ form.subject }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.message.label_tag }}
+                        {{ form.message }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+
+            <div class="contact-details-container">
+                <h3>Contact Information</h3>
+                <p>Feel free to reach out to us directly through any of the following methods.</p>
+                <ul class="contact-info-list">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Campus Address</strong>
+                            <span>MES Abasaheb Garware College, Pune</span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong>
+                            <span><a href="mailto:satishbukki2@gmail.com">satishbukki2@gmail.com</a></span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <strong>Phone</strong>
+                            <span>+91 79727 53178</span><br>
+                            <span>+91 90757 04141</span><br>
+                            <span>+91 95795 36520</span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Open Hours</strong>
+                            <span>Monday - Friday: 9:00 AM - 5:00 PM</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

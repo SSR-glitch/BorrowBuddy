@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sign In - BorrowBuddy{% endblock %}
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="form-container">
+            <h2>Welcome Back!</h2>
+            <form id="signin-form" action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+                <p class="form-text">
+                    Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
