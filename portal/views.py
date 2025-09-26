@@ -18,7 +18,6 @@ from .models import User, Item, BorrowRecord, Feedback, Notification
 from .forms import CustomUserCreationForm, ItemForm, ContactForm, UserUpdateForm, PasswordChangeForm, FeedbackForm
 
 def home(request):
-    """Renders the home page with featured items."""
     featured_items = Item.objects.filter(is_available=True).order_by('-date_posted')[:4]
     context = {
         'featured_items': featured_items
@@ -26,7 +25,6 @@ def home(request):
     return render(request, 'index.html', context)
 
 def browse_items(request):
-    """Renders the browse page with a list of all available items, with search and pagination."""
     items_list = Item.objects.filter(is_available=True).order_by('-date_posted')
     query = request.GET.get('q')
     category = request.GET.get('category')
@@ -329,7 +327,7 @@ def profile_view(request):
 
 def add_item_view(request):
     if not request.user.is_authenticated:
-        messages.info(request, "Please login to lend an item.")
+        messages.info(request, "Please Login / Sign Up to lend an item.")
         return redirect('login')
     if request.method == 'POST':
         form = ItemForm(request.POST, request.FILES)

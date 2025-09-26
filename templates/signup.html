@@ -18,7 +18,7 @@
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     <div class="input-wrapper">
                         {{ field }}
-                        {% if field.name == 'password' or field.name == 'password2' %}
+                        {% if field.name == 'password2' or field.name == 'password' %}
                             <span class="password-toggle-icon">👁️</span>
                         {% endif %}
                     </div>

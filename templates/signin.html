@@ -2,19 +2,25 @@
 {% load static %}
 {% block title %}Sign In - BorrowBuddy{% endblock %}
 {% block content %}
-<section class="section-padding">
-    <div class="container">
-        <div class="form-container">
-            <h2>Welcome Back!</h2>
-            <form id="signin-form" action="{% url 'login' %}" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
-                <p class="form-text">
-                    Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
-                </p>
-            </form>
-        </div>
+<section class="auth-section">
+    <div class="auth-container">
+        <h2 class="auth-title">Welcome Back 👋</h2>
+        <p class="auth-subtitle">Sign in and enjoy full access</p>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+
+        <p class="auth-footer">
+            <a href="{% url 'password_reset' %}" class="auth-link">Forgot your password?</a>
+        </p>
+
+        <p class="auth-footer">
+            Don’t have an account?  
+            <a href="{% url 'signup' %}" class="auth-link">Sign up here</a>
+        </p>
     </div>
 </section>
 {% endblock %}
